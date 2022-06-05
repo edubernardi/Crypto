@@ -40,7 +40,7 @@ def encrypt(input_file, key):
             round = 1
             while round < 2:
                 key = key_schedule(key, round)
-                key_bytes = bytearray(4)
+                key_bytes = bytearray()
                 for char in key:
                     key_bytes.append(ord(char))
                 key_bits = np.unpackbits(key_bytes)
@@ -53,7 +53,7 @@ def encrypt(input_file, key):
                             buffer_bits3[i] = 1
                         i += 1
                     else:
-                        if buffer_bits2[i - 32] == key_bits[i]:
+                        if buffer_bits2[i - 32] == key_bits[i - 32]:
                             buffer_bits3[i] = 0
                         else:
                             buffer_bits3[i] = 1
@@ -95,7 +95,7 @@ def decrypt(input_file, key):
             round = 1
             while round < 2:
                 key = key_schedule(key, round)
-                key_bytes = bytearray(4)
+                key_bytes = bytearray()
                 for char in key:
                     key_bytes.append(ord(char))
                 key_bits = np.unpackbits(key_bytes)
@@ -108,7 +108,7 @@ def decrypt(input_file, key):
                             buffer_bits3[i] = 1
                         i += 1
                     else:
-                        if buffer_bits2[i - 32] == key_bits[i]:
+                        if buffer_bits2[i - 32] == key_bits[i - 32]:
                             buffer_bits3[i] = 0
                         else:
                             buffer_bits3[i] = 1
