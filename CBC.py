@@ -46,49 +46,103 @@ def encrypt(input_file, key, decrypt):
             max_rounds = 5
             key = original_key
             while round < max_rounds:
-                if decrypt:
-                    key = reverse_key_schedule(original_key, round, max_rounds)
-                else:
-                    key = key_schedule(key, round)
+                key = key_schedule(key, round)
                 key_bytes = bytearray()
                 for char in key:
                     key_bytes.append(ord(char))
 
-                #Ceasar Cypher
-                i = 0
-                while i < 4:
-                    key_bytes[i] = (round + key_bytes[i]) % 256
-                    i += 1
-
+                # #Ceasar Cypher
+                # i = 0
+                # while i < 4:
+                #     key_bytes[i] = (round + key_bytes[i]) % 256
+                #     i += 1
+                #
                 key_bits = expand(np.unpackbits(key_bytes), 48)
-
-                #Decrypt substitution
-                if decrypt:
-                    buffer_bits = substitution(buffer_bits, decrypt)
 
                 #XOR
                 i = 0
                 while i < 48:
-                    if buffer_bits[i] == key_bits[i]:
+                    if buffer_bits[i] == key_bits[i]: #invert positions
                         buffer_bits[i] = 0
                     else:
                         buffer_bits[i] = 1
                     i += 1
 
                 #Substitution
-                if not decrypt:
-                    buffer_bits = substitution(buffer_bits, decrypt)
+                buffer_bits = substitution(buffer_bits, decrypt)
+
+                round += 1
+            #final permutation
+            buffer = bytearray(np.packbits(buffer_bits))
+
+            for byte in buffer:
+                output.write(bytes([byte]))
+
+
+def decrypt(input_file, key, decrypt):
+    if len(key) >= 4:
+        key = key[0: 4]
+    else:
+        return
+    file = open(input_file, "rb")
+    extension = ".crypto"
+    if decrypt:
+        extension = ".decrypt"
+    output = open(input_file + extension, "wb")
+
+    end_of_file = False
+    original_key = key
+    while not end_of_file:
+        buffer = file.read(6)
+        if len(buffer) < 1:
+            end_of_file = True
+        else:
+            buffer = bytearray(buffer)
+            while len(buffer) < 6:
+                buffer.append(0)
+
+            buffer_bits = np.unpackbits(buffer)
+
+            round = 1
+            max_rounds = 5
+            key = original_key
+            while round < max_rounds:
+                key = reverse_key_schedule(original_key, round, max_rounds) #generating keys backwards
+                key_bytes = bytearray()
+                for char in key:
+                    key_bytes.append(ord(char))
+
+                #Ceasar Cypher
+                # i = 0
+                # while i < 4:
+                #     key_bytes[i] = (round + key_bytes[i]) % 256
+                #     i += 1
+
+                key_bits = expand(np.unpackbits(key_bytes), 48)
+
+                #Decrypt substitution
+                buffer_bits = substitution(buffer_bits, decrypt)
+
+                #XOR
+                i = 0
+                while i < 48:
+                    if buffer_bits[i] == key_bits[i]: #invert positions
+                        buffer_bits[i] = 0
+                    else:
+                        buffer_bits[i] = 1
+                    i += 1
+
                 round += 1
 
+            #final permutation
             buffer = bytearray(np.packbits(buffer_bits))
 
             #remove padding
-            if decrypt:
-                new_buffer = bytearray()
-                for byte in buffer:
-                    if int(byte) != 0:
-                        new_buffer.append(byte)
-                buffer = new_buffer
+            new_buffer = bytearray()
+            for byte in buffer:
+                if int(byte) != 0:
+                    new_buffer.append(byte)
+            buffer = new_buffer
 
             for byte in buffer:
                 output.write(bytes([byte]))

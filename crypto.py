@@ -10,7 +10,7 @@ if len(sys.argv) == 3:
     file_name = sys.argv[1]
     key = sys.argv[2]
     if ".crypto" in file_name:
-        CBC.encrypt(file_name, key, True)
+        CBC.decrypt(file_name, key, True)
     else:
         CBC.encrypt(file_name, key, False)
 else:
