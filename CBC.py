@@ -43,7 +43,7 @@ def encrypt(input_file, key, decrypt):
             buffer_bits = np.unpackbits(buffer)
 
             round = 1
-            max_rounds = 5
+            max_rounds = 15
             key = original_key
             while round < max_rounds:
                 key = key_schedule(key, round)
@@ -51,18 +51,18 @@ def encrypt(input_file, key, decrypt):
                 for char in key:
                     key_bytes.append(ord(char))
 
-                # #Ceasar Cypher
-                # i = 0
-                # while i < 4:
-                #     key_bytes[i] = (round + key_bytes[i]) % 256
-                #     i += 1
-                #
+                #Caesar Cipher
+                i = 0
+                while i < 4:
+                    key_bytes[i] = (key_bytes[i] + round) % 256
+                    i += 1
+
                 key_bits = expand(np.unpackbits(key_bytes), 48)
 
                 #XOR
                 i = 0
                 while i < 48:
-                    if buffer_bits[i] == key_bits[i]: #invert positions
+                    if buffer_bits[i] == key_bits[i]:
                         buffer_bits[i] = 0
                     else:
                         buffer_bits[i] = 1
@@ -70,9 +70,10 @@ def encrypt(input_file, key, decrypt):
 
                 #Substitution
                 buffer_bits = substitution(buffer_bits, decrypt)
-
                 round += 1
+
             #final permutation
+
             buffer = bytearray(np.packbits(buffer_bits))
 
             for byte in buffer:
@@ -104,7 +105,7 @@ def decrypt(input_file, key, decrypt):
             buffer_bits = np.unpackbits(buffer)
 
             round = 1
-            max_rounds = 5
+            max_rounds = 15
             key = original_key
             while round < max_rounds:
                 key = reverse_key_schedule(original_key, round, max_rounds) #generating keys backwards
@@ -112,11 +113,11 @@ def decrypt(input_file, key, decrypt):
                 for char in key:
                     key_bytes.append(ord(char))
 
-                #Ceasar Cypher
-                # i = 0
-                # while i < 4:
-                #     key_bytes[i] = (round + key_bytes[i]) % 256
-                #     i += 1
+                #Caesar Cipher
+                i = 0
+                while i < 4:
+                    key_bytes[i] = (key_bytes[i] + (max_rounds - round)) % 256
+                    i += 1
 
                 key_bits = expand(np.unpackbits(key_bytes), 48)
 
@@ -126,13 +127,15 @@ def decrypt(input_file, key, decrypt):
                 #XOR
                 i = 0
                 while i < 48:
-                    if buffer_bits[i] == key_bits[i]: #invert positions
+                    if buffer_bits[i] == key_bits[i]:
                         buffer_bits[i] = 0
                     else:
                         buffer_bits[i] = 1
                     i += 1
 
                 round += 1
+
+
 
             #final permutation
             buffer = bytearray(np.packbits(buffer_bits))
