@@ -93,7 +93,7 @@ def decrypt(input_file, key, decrypt):
     original_key = key
     while not end_of_file:
         buffer = file.read(6)
-        if len(buffer) < 1:
+        if len(buffer) < 6:
             end_of_file = True
         else:
             buffer = bytearray(buffer)
