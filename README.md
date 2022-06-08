@@ -8,8 +8,8 @@ Este trabalho tem como objetivo criptografar e decriptar arquivos lidos por bloc
 ---
 
 Através de argumentos da linha de comando, são passados o nome do arquivo e a chave para criptografia, no formato "crypto.py {input file} {key (4 bytes long)}"
-Caso o arquivo possua ".crypto", será chamada a função <span style="color:green; font-weight:700">decrypt</span>, que vai decriptar a entrada e gerar um arquivo ".decrypt" como saída.
 
+Caso o arquivo possua ".crypto" no nome, será chamada a função <span style="color:green; font-weight:700">decrypt</span>, que vai decriptar a entrada e gerar um arquivo ".decrypt" como saída.
 Caso contrário, <span style="color:green; font-weight:700">encrypt</span> será chamada e a saída será um arquivo ".crypto".
 
 A chave fornecida deve ser de 4 bytes. Se for maior, apenas os primeiros 4 serão considerados. Se for menor, a função retorna e não é executada.
