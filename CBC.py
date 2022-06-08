@@ -97,9 +97,6 @@ def decrypt(input_file, key, decrypt):
             end_of_file = True
         else:
             buffer = bytearray(buffer)
-            while len(buffer) < 6:
-                end_of_file = True
-                buffer.append(0)
 
             buffer_bits = np.unpackbits(buffer)
 
