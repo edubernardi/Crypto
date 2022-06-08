@@ -1,6 +1,6 @@
 # Teoria da Informação - Trabalho 4: Cifrador Simétrico de Bloco
 
-#Alunos participantes: Eduardo Bernardi e Guilherme Spohr Rabelo
+Alunos participantes: Eduardo Bernardi e Guilherme Spohr Rabelo
 
 ## Objetivo
 Este trabalho tem como objetivo criptografar e decriptar arquivos lidos por blocos (6 bytes por vez).
