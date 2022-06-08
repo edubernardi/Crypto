@@ -17,4 +17,5 @@ O processo de criptografia se dá através de rounds, a cada um é executado o <
 - A operação XOR é realizada bit a bit, entre cada bit da chave e do bloco atual.
 - O processo de substituição é feito a partir de uma s_box 4x4. Para a decriptografia é utilizada uma s_box invertida.
 - O número de rounds usados na criptografia e descriptografia deve ser o mesmo, para execução foram definidos como *15*.
-Como último passo, na função <span style="color:green; font-weight:700">decrypt</span> é realizado a aremoção do padding, os bytes nulos ao final do arquivo.
+
+Como último passo, na função <span style="color:green; font-weight:700">decrypt</span> é realizada a remoção do padding, os bytes nulos ao final do arquivo.
