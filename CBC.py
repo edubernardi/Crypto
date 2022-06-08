@@ -98,6 +98,7 @@ def decrypt(input_file, key, decrypt):
         else:
             buffer = bytearray(buffer)
             while len(buffer) < 6:
+                end_of_file = True
                 buffer.append(0)
 
             buffer_bits = np.unpackbits(buffer)
@@ -138,12 +139,22 @@ def decrypt(input_file, key, decrypt):
             #final permutation
             buffer = bytearray(np.packbits(buffer_bits))
 
+            #check if last block
+            next = file.read(1)
+            if len(next) > 0:
+                file.seek(-1, 1)
+            else:
+                end_of_file = True
+
             #remove padding
-            new_buffer = bytearray()
-            for byte in buffer:
-                if int(byte) != 0:
-                    new_buffer.append(byte)
-            buffer = new_buffer
+            if end_of_file:
+                i = 5
+                while i >= 0:
+                    if int(buffer[i]) == 0:
+                        buffer.pop(i)
+                    else:
+                        break
+                    i -= 1
 
             for byte in buffer:
                 output.write(bytes([byte]))
