@@ -1,3 +1,4 @@
+#Alunos participantes: Eduardo Bernardi e Guilherme Spohr Rabelo
 import CBC
 import sys
 import numpy as np

@@ -72,8 +72,6 @@ def encrypt(input_file, key, decrypt):
                 buffer_bits = substitution(buffer_bits, decrypt)
                 round += 1
 
-            #final permutation
-
             buffer = bytearray(np.packbits(buffer_bits))
 
             for byte in buffer:
